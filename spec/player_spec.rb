@@ -1,6 +1,6 @@
 require_relative "../player_service"
 
-RSpec.describe PlayerService do
+RSpec.describe "player_service" do
   it "does a thing" do
 
   end

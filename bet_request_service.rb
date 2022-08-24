@@ -14,6 +14,7 @@ class BetRequestService
     @community_cards = @game_state["community_cards"]
 
     my_index = @game_state["in_action"]
+    binding.irb
     @player = @game_state["players"][my_index]
 
     @hole_card_1, @hole_card_2 = @player["hole_cards"]
@@ -86,5 +87,11 @@ class BetRequestService
 
   def have_hole_pair?
     @hole_card_1["rank"] == @hole_card_2["rank"]
+  end
+
+  # hands
+
+  def have_pairs?
+    [@hole_card_1["rank"], @hole_card_2["rank"]] + @game_state["community_cards"].map {|c| c["rank"]}
   end
 end
