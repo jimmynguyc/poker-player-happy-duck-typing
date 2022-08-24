@@ -29,7 +29,7 @@ class BetRequestService
   end
 
   def raise_by(n=100)
-    call + n
+    call_bet + n
   end
 
   def check_or_fold
