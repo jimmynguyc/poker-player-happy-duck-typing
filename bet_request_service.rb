@@ -73,15 +73,15 @@ class BetRequestService
 
   def hole_card_part_of_nuts?
     if (pair = hand.pairs) && !pair.empty?
-      return true if [@hole_card_1["rank"], @hole_card_2["rank"]].includes?(pair.first.first)
+      return true if [@hole_card_1["rank"], @hole_card_2["rank"]].include?(pair.first.first)
     end
 
     if (trips = hand.trips) && !trips.empty?
-      return true if [@hole_card_1["rank"], @hole_card_2["rank"]].includes?(trips.keys.first)
+      return true if [@hole_card_1["rank"], @hole_card_2["rank"]].include?(trips.keys.first)
     end
 
     if (quads = hand.quads) && !quads.empty?
-      return true if [@hole_card_1["rank"], @hole_card_2["rank"]].includes?(quads.keys.first)
+      return true if [@hole_card_1["rank"], @hole_card_2["rank"]].include?(quads.keys.first)
     end
 
     false
