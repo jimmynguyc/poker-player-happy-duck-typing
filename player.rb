@@ -2,7 +2,7 @@ require_relative 'bet_request_service'
 
 class Player
 
-  VERSION = "Negreanu Bot"
+  VERSION = "Negreanu Bot v1.0"
 
   def bet_request(game_state)
     BetRequestService.new(game_state).call
