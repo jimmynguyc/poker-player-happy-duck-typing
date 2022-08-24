@@ -14,9 +14,6 @@ class BetRequestService
   end
 
   def call
-    #current_buy_in = game_state["current_buy_in"]
-    #pot = game_state["pot"]
-
     return raise_by(100) if bet_big?
     return check_or_fold if hole_cards_are_shitty?
 
@@ -52,13 +49,13 @@ class BetRequestService
   def hole_cards_are_shitty?
     shitty_ranks = %w{2 3 4 5 6}
 
-    @hole_card_1["rank"].in?(shitty_ranks) && @hole_card_2["rank"].in?(shitty_ranks)
+    shitty_ranks.include?(@hole_card_1["rank"]) && shitty_ranks.include?(@hole_card_2["rank"])
   end
 
   def hole_cards_are_not_shitty?
     pictures = %w{J Q K A}
 
-    @hole_card_1["rank"].in?(pictures) || @hole_card_2["rank"].in?(picutres)
+    pictures.include?(@hole_card_1["rank"]) || pictures.include?(@hole_card_2["rank"])
   end
 
 
