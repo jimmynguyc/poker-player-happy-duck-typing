@@ -32,15 +32,19 @@ class BetRequestService
 
   def call
     if @round == :pre_flop
-      return raise_by(100) if bet_big?
-    else
-      pictures = %w{J Q K A}
-      if !hand.pairs.empty? && pictures.include?(hand.pairs.first.first)
-        return raise_by(@player["stack"])
-      elsif !hand.trips.empty? || !hand.quads.empty?
-        return raise_by(@player["stack"])
+      if bet_big? && @game_state["current_buy_in"] < @player["stack"] * 0.3
+         raise_by(100)
       end
+    #else
+    #  pictures = %w{Q K A}
+    #  if (!hand.pairs.empty? && pictures.include?(hand.pairs.first.first))
+    #    || !hand.trips.empty?
+    #    || !hand.quads.empty?
+#
+#        return raise_by(@player["stack"])
+#      end
     end
+
     return check_or_fold if hole_cards_are_shitty?
 
     if @game_state["current_buy_in"] > @player["stack"] * 0.3
