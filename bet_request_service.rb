@@ -14,7 +14,6 @@ class BetRequestService
     @community_cards = @game_state["community_cards"]
 
     my_index = @game_state["in_action"]
-    binding.irb
     @player = @game_state["players"][my_index]
 
     @hole_card_1, @hole_card_2 = @player["hole_cards"]
@@ -32,7 +31,16 @@ class BetRequestService
   end
 
   def call
-    return raise_by(100) if bet_big? && @game_state["community_cards"].empty?
+    if @round == :pre_flop
+      return raise_by(100) if bet_big?
+    else
+      pictures = %w{J Q K A}
+      if !hand.pairs.empty? && pictures.include?(hand.pairs.first.first)
+        return raise_by(@player["stack"])
+      elsif !hand.trips.empty? || !hand.quads.empty?
+        return raise_by(@player["stack"])
+      end
+    end
     return check_or_fold if hole_cards_are_shitty?
 
     if @game_state["current_buy_in"] > @player["stack"] * 0.3
