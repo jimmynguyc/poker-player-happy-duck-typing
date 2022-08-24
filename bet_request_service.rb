@@ -1,14 +1,28 @@
 class BetRequestService
-  attr_reader :game_state, :current_buy_in, :player,:hole_card_1, :hole_card_2
+  attr_reader :game_state,
+    :current_buy_in,
+    :player,
+    :hole_card_1,
+    :hole_card_2,
+    :community_cards,
+    :round
 
   def initialize(game_state)
     @game_state = game_state
     @current_buy_in = @game_state["current_buy_in"]
+    @community_cards = @game_state["community_cards"]
 
     my_index = @game_state["in_action"]
     @player = @game_state["players"][my_index]
 
     @hole_card_1, @hole_card_2 = @player["hole_cards"]
+
+    @round = {
+      0 => :pre_flop,
+      3 => :flop,
+      4 => :turn,
+      5 => :river
+    }[@community_cards.count]
 
     puts @game_state.inspect
   end
