@@ -68,9 +68,7 @@ class BetRequestService
 
   def have_nuts?
     pictures = %w{J Q K A}
-    (!hand.pairs.empty? && pictures.include?(hand.pairs.first.first))
-        || !hand.trips.empty?
-        || !hand.quads.empty?
+    (!hand.pairs.empty? && pictures.include?(hand.pairs.first.first)) || !hand.trips.empty? || !hand.quads.empty?
   end
 
   def hole_card_part_of_nuts?
