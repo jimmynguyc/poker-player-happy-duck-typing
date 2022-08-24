@@ -43,8 +43,8 @@ class BetRequestService
   # decisions
 
   def bet_big?
-    hole_card_same_suit? ||
-      have_hole_pair? ||
+    hole_card_same_suit? &&
+      have_hole_pair? &&
       hole_cards_are_not_shitty?
   end
 
