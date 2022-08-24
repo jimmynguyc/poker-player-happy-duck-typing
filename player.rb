@@ -1,4 +1,5 @@
 require_relative 'bet_request_service'
+require_relative 'lib/hand'
 
 class Player
 

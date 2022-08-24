@@ -5,7 +5,8 @@ class BetRequestService
     :hole_card_1,
     :hole_card_2,
     :community_cards,
-    :round
+    :round,
+    :hand
 
   def initialize(game_state)
     @game_state = game_state
@@ -23,6 +24,8 @@ class BetRequestService
       4 => :turn,
       5 => :river
     }[@community_cards.count]
+
+    @hand = Hand.new(@player["hole_cards"], @game_state["community_cards"])
 
     puts @game_state.inspect
   end
