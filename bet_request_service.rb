@@ -35,7 +35,7 @@ class BetRequestService
     return raise_by(100) if bet_big?
     return check_or_fold if hole_cards_are_shitty?
 
-      check_or_fold
+      call_bet # stay in game
   end
 
   private
