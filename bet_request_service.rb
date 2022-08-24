@@ -1,13 +1,14 @@
 class BetRequestService
-  attr_reader :game_state, :hole_card_1, :hole_card_2
+  attr_reader :game_state, :current_buy_in, :player,:hole_card_1, :hole_card_2
 
   def initialize(game_state)
     @game_state = game_state
+    @current_buy_in = @game_state["current_buy_in"]
 
     my_index = @game_state["in_action"]
-    me = @game_state["players"][my_index]
+    @player = @game_state["players"][my_index]
 
-    @hole_card_1, @hole_card_2 = me["hole_cards"]
+    @hole_card_1, @hole_card_2 = @player["hole_cards"]
 
     puts @game_state.inspect
   end
@@ -16,7 +17,8 @@ class BetRequestService
     #current_buy_in = game_state["current_buy_in"]
     #pot = game_state["pot"]
 
-    return big_bet if bet_big?
+    return raise_by(100) if bet_big?
+    return call_bet if stay_in_game?
 
     check_or_fold
   end
@@ -25,20 +27,38 @@ class BetRequestService
 
   # return bets
   #
-  def big_bet
-    100
+
+  def call_bet
+    current_buy_in - player["bet"]
+  end
+
+  def raise_by(n=100)
+    call + n
   end
 
   def check_or_fold
     0
   end
 
-  # logics
+  # decisions
 
   def bet_big?
     hole_card_same_suit? ||
-      have_hole_pair?
+      have_hole_pair? ||
+      hole_cards_are_not_shitty?
   end
+
+  def stay_in_game?
+    true
+  end
+
+  # logics
+  def hole_cards_are_not_shitty?
+    pictures = %w{J Q K A}
+
+    @hold_card_1["rank"].in?(pictures) || @hole_card_2["rank"].in?(picutres)
+  end
+
 
   def hole_card_same_suit?
     @hole_card_1["suit"] == @hole_card_2["suit"]
