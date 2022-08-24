@@ -18,15 +18,14 @@ class BetRequestService
     #pot = game_state["pot"]
 
     return raise_by(100) if bet_big?
-    return call_bet if stay_in_game?
+    return check_or_fold if hole_cards_are_shitty?
 
-    check_or_fold
+    call_bet # stay in game
   end
 
   private
 
   # return bets
-  #
 
   def call_bet
     current_buy_in - player["bet"]
@@ -48,15 +47,18 @@ class BetRequestService
       hole_cards_are_not_shitty?
   end
 
-  def stay_in_game?
-    true
+  # logics
+
+  def hole_cards_are_shitty?
+    shitty_ranks = %w{2 3 4 5 6}
+
+    @hole_card_1["rank"].in?(shitty_ranks) && @hole_card_2["rank"].in?(shitty_ranks)
   end
 
-  # logics
   def hole_cards_are_not_shitty?
     pictures = %w{J Q K A}
 
-    @hold_card_1["rank"].in?(pictures) || @hole_card_2["rank"].in?(picutres)
+    @hole_card_1["rank"].in?(pictures) || @hole_card_2["rank"].in?(picutres)
   end
 
 
