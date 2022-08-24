@@ -31,23 +31,11 @@ class BetRequestService
   end
 
   def call
-    if @round == :pre_flop
-      if bet_big? && @game_state["current_buy_in"] < @player["stack"] * 0.3
-         raise_by(100)
-      end
-    #else
-    #  pictures = %w{Q K A}
-    #  if (!hand.pairs.empty? && pictures.include?(hand.pairs.first.first))
-    #    || !hand.trips.empty?
-    #    || !hand.quads.empty?
-#
-#        return raise_by(@player["stack"])
-#      end
-    end
-
+    return raise_by(50) if have_nuts? && hole_card_part_of_nuts?
+    return raise_by(100) if bet_big?
     return check_or_fold if hole_cards_are_shitty?
 
-    if @game_state["current_buy_in"] > @player["stack"] * 0.3
+    if @game_state["current_buy_in"] > @player["stack"] * 0.5
       check_or_fold
     else
       call_bet # stay in game
@@ -63,7 +51,7 @@ class BetRequestService
   end
 
   def raise_by(n=100)
-    call_bet + n
+    (call_bet + n).to_i
   end
 
   def check_or_fold
@@ -76,6 +64,29 @@ class BetRequestService
     (hole_card_same_suit? ||
       have_hole_pair?) &&
       hole_cards_are_not_shitty?
+  end
+
+  def have_nuts?
+    pictures = %w{J Q K A}
+    (!hand.pairs.empty? && pictures.include?(hand.pairs.first.first))
+        || !hand.trips.empty?
+        || !hand.quads.empty?
+  end
+
+  def hole_card_part_of_nuts?
+    if (pair = hand.pairs) && !pair.empty?
+      return true if (@hole_card_1["rank"], @hole_card_2["rank"]).includes?(pair.first.first)
+    end
+
+    if (trips = hand.trips) && !trips.empty?
+      return true if (@hole_card_1["rank"], @hole_card_2["rank"]).includes?(trips.keys.first)
+    end
+
+    if (quads = hand.quads) && !quads.empty?
+      return true if (@hole_card_1["rank"], @hole_card_2["rank"]).includes?(quads.keys.first)
+    end
+
+    false
   end
 
   # logics
