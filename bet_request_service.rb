@@ -14,7 +14,7 @@ class BetRequestService
   end
 
   def call
-    return raise_by(100) if bet_big?
+    return raise_by(100) if bet_big? && @game_state["round"] == 1
     return check_or_fold if hole_cards_are_shitty?
 
     if @game_state["current_buy_in"] > @player["stack"] * 0.3
